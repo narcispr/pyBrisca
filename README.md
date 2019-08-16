@@ -4,3 +4,7 @@
 * *Random*: Picks up a random card from the players hand. 
 * *Simple-AI*: Rule based AI that plays much better than random (and some human players too).
 
+## Installation dependencies
+* python3 -m pip install opencv-contrib-python
+* sudo apt-get install python3-espeak
+* pip3 install pyttsx3

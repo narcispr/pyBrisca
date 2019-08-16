@@ -81,6 +81,14 @@ class Deck:
             return ret[0]
         return ret
 
+    @staticmethod
+    def get_card_id(id):
+        suit = int((id - 1)/12)
+        assert suit < 4, 'Invalid card id'
+        number = (id - suit*12)
+        assert number <= 12, 'Invalid card id'
+        return Card(suit, number, 0, 0)
+
 
 class BriscaPlayerBase:
     def __init__(self, name, params=None):
@@ -136,19 +144,21 @@ class BriscaPlayerSimpleAI(BriscaPlayerBase):
             candidates = Stack()
             for c in table.cards:
                 points_table += c.points
-                BriscaGame.calculate_card_value(c, victory_suit, table.cards[0].suit)
+                calculate_card_value(c, victory_suit, table.cards[0].suit)
                 if c.value > max_value_table:
                     max_value_table = c.value
             for c in self.hand.cards:
-                BriscaGame.calculate_card_value(c, victory_suit, table.cards[0].suit)
+                calculate_card_value(c, victory_suit, table.cards[0].suit)
                 if c.value > max_value_table:
                     candidates.cards.append(c)
             if len(candidates.cards) > 0 and (points_table > 0  or candidates.max_points()[1] > 0):
                 idx = self.hand.cards.index(candidates.cards[candidates.max_points()[0]])
 
-        print('Jugador {}: baixa {}'.format(self.name, self.hand.cards[idx]))
+        # print('Jugador {}: baixa {}'.format(self.name, self.hand.cards[idx]))
         table.add(self.hand.cards[idx], self.name)
+        played_card = self.hand.cards[idx]
         del self.hand.cards[idx]
+        return idx, played_card
 
 
 class BriscaGame:
@@ -180,18 +190,8 @@ class BriscaGame:
         table = Stack()
         for p in self.player_order():
             self.players[p].play(table, self.central_card.suit)
-        points = 0
-        max_value = -1
-        owner = None
-        card = None
-        for i, c in enumerate(table.cards):
-            self.calculate_card_value(c, self.central_card.suit, table.cards[0].suit)
-            points += c.points
-            if c.value > max_value:
-                owner = table.owner[i]
-                card = c
-                max_value = c.value
-        print('La carta guanyadora es {} de {}\n\n'.format(card, owner))
+
+        owner, card, points = check_victory_hand(table, self.central_card.suit)
 
         for i, p in enumerate(self.players):
             if p.name == owner:
@@ -216,54 +216,6 @@ class BriscaGame:
         print('El guanyador es el jugador {}: {} amb {} punts.'.format(winner_idx, winner, max_points))
         return winner_idx, max_points
 
-    @staticmethod
-    def calculate_card_value(card, victory_suit, hand_suit=None):
-        if hand_suit is None:
-            hand_suit = card.suit
-        if card.suit == victory_suit:
-            card.value = card.points + 24
-        elif card.suit == hand_suit:
-            card.value = card.points + 12
-        if card.number == 4:
-            card.value += 0.1
-        if card.number == 5:
-            card.value += 0.2
-        if card.number == 6:
-            card.value += 0.3
-        if card.number == 7:
-            card.value += 0.4
-        if card.number == 8:
-            card.value += 0.5
-        if card.number == 9:
-            card.value += 0.6
-
-    @staticmethod
-    def set_card_points(card):
-        if card.number == 1:
-            card.points = 11
-        elif card.number == 2:
-            card.points = 0
-        elif card.number == 3:
-            card.points = 10
-        elif card.number == 4:
-            card.points = 0
-        elif card.number == 5:
-            card.points = 0
-        elif card.number == 6:
-            card.points = 0
-        elif card.number == 7:
-            card.points = 0
-        elif card.number == 8:
-            card.points = 0
-        elif card.number == 9:
-            card.points = 0
-        elif card.number == 10:
-            card.points = 2
-        elif card.number == 11:
-            card.points = 3
-        elif card.number == 12:
-            card.points = 4
-
     def __str__(self):
         ret = 'Carta central: ' + str(self.central_card) + '\n'
 
@@ -272,26 +224,91 @@ class BriscaGame:
 
         return ret
 
+
+def check_victory_hand(table, victory_suit):
+    print('Victory suit: {}'.format(victory_suit))
+    points = 0
+    max_value = -1
+    owner = None
+    card = None
+    for i, c in enumerate(table.cards):
+        calculate_card_value(c, victory_suit, table.cards[0].suit)
+        points += c.points
+        if c.value > max_value:
+            owner = table.owner[i]
+            card = c
+            max_value = c.value
+    print('La carta guanyadora es {} de {}\n\n'.format(card, owner))
+    return owner, card, points
+
+
+def calculate_card_value(card, victory_suit, hand_suit=None):
+    if hand_suit is None:
+        hand_suit = card.suit
+    if card.suit == victory_suit:
+        card.value = card.points + 24
+    elif card.suit == hand_suit:
+        card.value = card.points + 12
+    if card.number == 4:
+        card.value += 0.1
+    if card.number == 5:
+        card.value += 0.2
+    if card.number == 6:
+        card.value += 0.3
+    if card.number == 7:
+        card.value += 0.4
+    if card.number == 8:
+        card.value += 0.5
+    if card.number == 9:
+        card.value += 0.6
+
+
+def set_card_points(card):
+    if card.number == 1:
+        card.points = 11
+    elif card.number == 2:
+        card.points = 0
+    elif card.number == 3:
+        card.points = 10
+    elif card.number == 4:
+        card.points = 0
+    elif card.number == 5:
+        card.points = 0
+    elif card.number == 6:
+        card.points = 0
+    elif card.number == 7:
+        card.points = 0
+    elif card.number == 8:
+        card.points = 0
+    elif card.number == 9:
+        card.points = 0
+    elif card.number == 10:
+        card.points = 2
+    elif card.number == 11:
+        card.points = 3
+    elif card.number == 12:
+        card.points = 4
+
 if __name__ == '__main__':
 
-    total_points = [0, 0, 0, 0]
+    total_points = [0, 0]
     for i in range(10000):
-        p0 = BriscaPlayerRandom('Random-1')
+        p0 = BriscaPlayerHuman('Lidia')
         params = dict()
         params['victory_suit_penalty'] = 0
         p1 = BriscaPlayerSimpleAI('Simple-AI_1', params)
         params['victory_suit_penalty'] = 3.5
         p2 = BriscaPlayerSimpleAI('Simple-AI_2', params)
-        p3 = BriscaPlayerRandom('Random-2')
+        p3 = BriscaPlayerRandom('Random')
 
-        players = [p2, p0, p3, p1]
+        players = [p2, p3]
         # random.shuffle(players)
         brisca = BriscaGame(players)
         result = brisca.game()
 
-        total_points[result[0]] += result[1]
+        total_points[result[0]] += 1
 
     for i, p in enumerate(total_points):
-        print('Player {}: {} points'.format(i, p))
+       print('Player {}: {} points'.format(i, p))
 
 # victory_suit_penalty --> amb 2 jugadors millor posar 3.5 amb 4 jugadors no ho tinc clar...
