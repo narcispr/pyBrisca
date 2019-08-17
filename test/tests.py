@@ -1,7 +1,8 @@
 import unittest
-from pyBriscaAR import BriscaARGame
-from pyBrisca import BriscaPlayerSimpleAI, Card
 import random
+from card_utils import Card
+from brisca_game_ar import BriscaGameAR
+from brisca_players import BriscaPlayerSimpleAI
 
 
 class BriscaARGAmeTestCase(unittest.TestCase):
@@ -9,7 +10,7 @@ class BriscaARGAmeTestCase(unittest.TestCase):
         params = dict()
         params['victory_suit_penalty'] = 3.5
         p1 = BriscaPlayerSimpleAI('Simple-AI', params)
-        self.brisca = BriscaARGame(['narcís', p1.name], 1, p1)
+        self.brisca = BriscaGameAR(['narcís', p1.name], 1, p1)
 
     def test_get_card(self):
         c1 = Card(int(random.random()*2), int(random.random()*12) + 1, 0, 0)
