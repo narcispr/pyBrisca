@@ -1,7 +1,7 @@
 # pyBrisca
 **pyBrisca** is a python implementation of the **brisca card game**. 
 It have a simple engine, 3 different players, and an Augmented Reality mode
-that allows to play *human* players and *AI* players using *normal* cards.
+that allows *human* players and *AI* players to play together using *normal* cards.
 
 ## Brisca Game Class
 Allows you to play brisca using 2 to 4 of these players:
