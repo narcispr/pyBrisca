@@ -99,7 +99,7 @@ class BriscaGameAR:
 
         self.announce(['Reparteix-me 3 cartes, siusplau!', "Dona'm la ma inicial"])
         for j in range(3):
-            self.player.hand.cards.append(self.get_card())
+            self.player.receive_card(self.get_card())
             if j < 2:
                 self.announce(['La següent...', 'Una més', 'Una altra...'])
 
@@ -143,7 +143,7 @@ class BriscaGameAR:
                 self.announce(['Donem una carta i col·locala en posició 3',
                                'Carta siusplau',
                                "M'acosteu la meva carta siusplau?"])
-                self.player.hand.cards.append(self.get_card())
+                self.player.receive_card(self.get_card())
 
         for j, p in enumerate(self.player_points):
             print('{}: {} punts'.format(self.players_name[j], p))

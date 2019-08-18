@@ -43,7 +43,7 @@ class BriscaGame:
         for j in self.player_order():
             new_card = self.deck.deal(1)
             if new_card is not None:
-                self.players[j].hand.cards.append(new_card)
+                self.players[j].receive_card(new_card)
 
     def game(self):
         while len(self.players[0].hand.cards) > 0:

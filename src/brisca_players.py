@@ -15,6 +15,9 @@ class BriscaPlayerBase:
         ret += str(self.hand)
         return ret
 
+    def receive_card(self, card):
+        self.hand.cards.append(card)
+
     def play(self, table, victory_suit=None):
         print('Not implemented in player {}'.format(self.name))
 
