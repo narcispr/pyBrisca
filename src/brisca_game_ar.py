@@ -4,7 +4,7 @@ import cv2
 from cv2 import aruco
 import pyttsx3
 from card_utils import Deck, Stack
-from brisca_utils import check_victory_hand, set_card_points
+from brisca_utils import check_victory_hand, BriscaDeck
 from brisca_players import BriscaPlayerSimpleAI
 
 
@@ -71,8 +71,7 @@ class BriscaGameAR:
                 card_id = -1
             else:
                 self.list_of_seen_cards.append(card_id)
-        card = Deck.get_card_id(card_id)
-        set_card_points(card)
+        card = BriscaDeck.get_card_id(card_id)
         return card
 
     def player_order(self):
