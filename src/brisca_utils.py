@@ -1,3 +1,22 @@
+from card_utils import Deck, Card
+
+
+class BriscaDeck(Deck):
+    def __init__(self):
+        Deck.__init__(self)
+        for c in self.cards:
+            set_card_points(c)
+
+    def get_card_id(card_id):
+        suit = int((card_id - 1) / 12)
+        assert suit < 4, 'Invalid card id'
+        number = (card_id - suit * 12)
+        assert number <= 12, 'Invalid card id'
+        c = Card(suit, number, 0, 0)
+        set_card_points(c)
+        return c
+
+
 def check_victory_hand(table, victory_suit):
     points = 0
     max_value = -1

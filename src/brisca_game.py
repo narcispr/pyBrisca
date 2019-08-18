@@ -1,5 +1,5 @@
-from card_utils import Deck, Stack
-from brisca_utils import check_victory_hand, set_card_points
+from card_utils import Stack
+from brisca_utils import check_victory_hand, BriscaDeck
 from brisca_players import BriscaPlayerSimpleAI, BriscaPlayerRandom
 
 
@@ -10,9 +10,7 @@ class BriscaGame:
         self.num_players = len(players_list)
         self.players = players_list
         self.next_player = 0
-        self.deck = Deck()
-        for c in self.deck.cards:
-            set_card_points(c)
+        self.deck = BriscaDeck()
         self.deck.shuffle()
         self.central_card = self.deck.cards[-1]
         print('Trumfo: {}'.format(self.central_card))
@@ -62,7 +60,6 @@ class BriscaGame:
 
     def __str__(self):
         ret = 'Carta central: ' + str(self.central_card) + '\n'
-
         for player in self.players:
             ret += 'Ma: {}\n{}'.format(player.name, str(player.hand))
 

@@ -1,23 +1,22 @@
 import unittest
 import sys
-from card_utils import Deck, Stack, Card
-from brisca_utils import set_card_points, calculate_card_value, check_victory_hand
+from card_utils import Stack, Card
+from brisca_utils import calculate_card_value, check_victory_hand, BriscaDeck
 from brisca_players import BriscaPlayerBase
 
 
 class BriscaUtilsTestCase(unittest.TestCase):
     def setUp(self):
         self.hand = Stack()
-        self.hand.cards.append(Card(0, 1))
-        self.hand.cards.append(Card(1, 3))
-        self.hand.cards.append(Card(2, 10))
+        self.hand.cards.append(Card(0, 1, 11))
+        self.hand.cards.append(Card(1, 3, 10))
+        self.hand.cards.append(Card(2, 10, 2))
         self.victory_card = Card(0, 9, 0, 0)
 
     def test_set_card_points(self):
-        deck = Deck()
+        deck = BriscaDeck()
         points = 0
         for c in deck.cards:
-            set_card_points(c)
             points += c.points
         print("Total points in a brisca deck is {}".format(points))
         self.assertEqual(points, 120, 'A whole brisca deck must contain 120 points!')
@@ -25,7 +24,6 @@ class BriscaUtilsTestCase(unittest.TestCase):
     def test_calculate_card_value(self):
         hand_card_values = list()
         for c in self.hand.cards:
-            set_card_points(c)
             calculate_card_value(c, self.victory_card.suit)
             hand_card_values.append(c.value)
         self.assertEqual(hand_card_values, [35, 22, 14], 'Card values has changed!')
@@ -39,13 +37,20 @@ class BriscaUtilsTestCase(unittest.TestCase):
         table.add(Card(0, 2, 0), 'player3')
         owner, card, points = check_victory_hand(table, self.victory_card.suit)
         self.assertEqual(owner, 'player3', 'Oros must wins over Copes')
+        table.clear()
+        table.add(Card(1, 4, 0), 'player1')
+        table.add(Card(1, 5, 0), 'player2')
+        table.add(Card(1, 6, 0), 'player3')
+        table.add(Card(1, 7, 0), 'player4')
+        owner, card, points = check_victory_hand(table, self.victory_card.suit)
+        self.assertEqual(owner, 'player4', '7 must win 4, 5 and 6')
 
 
 class BriscaPlayerTestCase(unittest.TestCase):
     def setUp(self):
         params = dict()
         self.player = BriscaPlayerBase('player-AI', params)
-        self.deck = Deck()
+        self.deck = BriscaDeck()
         self.deck.shuffle()
 
     def test_unseen_cards(self):

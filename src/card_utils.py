@@ -44,6 +44,10 @@ class Stack:
             points.append(c.points)
         return points.index(max(points)), max(points)
 
+    def clear(self):
+        self.cards.clear()
+        self.owner.clear()
+
     def __str__(self):
         ret = ''
         if len(self.owner) < len(self.cards):
