@@ -1,5 +1,5 @@
 import random
-from card_utils import Stack, Card
+from card_utils import Card, Stack, Deck
 from brisca_utils import calculate_card_value
 
 
@@ -9,6 +9,7 @@ class BriscaPlayerBase:
         self.hand = Stack()
         self.points = 0
         self.params = params
+        self.unseen_cards = Deck()
 
     def __str__(self):
         ret = self.name + ': \n'
@@ -17,6 +18,7 @@ class BriscaPlayerBase:
 
     def receive_card(self, card):
         self.hand.cards.append(card)
+        self.unseen_cards.remove_card(card)
 
     def play(self, table, victory_suit=None):
         print('Not implemented in player {}'.format(self.name))

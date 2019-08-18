@@ -5,7 +5,7 @@ from brisca_game_ar import BriscaGameAR
 from brisca_players import BriscaPlayerSimpleAI
 
 
-class BriscaARGAmeTestCase(unittest.TestCase):
+class BriscaGameARTestCase(unittest.TestCase):
     def setUp(self):
         params = dict()
         params['victory_suit_penalty'] = 3.5

@@ -4,7 +4,7 @@ import random
 class Card:
     suit_name = {0: 'Oros', 1: 'Copes', 2: 'Espases', 3: 'Bastos'}
 
-    def __init__(self, suit, number, points, value):
+    def __init__(self, suit, number, points=0, value=0):
         self.suit = suit
         self.number = number
         self.points = points
@@ -80,6 +80,12 @@ class Deck:
         elif len(ret) == 1:
             return ret[0]
         return ret
+
+    def remove_card(self, card):
+        idx = self.cards.index(card)
+        if idx >= 0:
+            del self.cards[idx]
+        return idx
 
     @staticmethod
     def get_card_id(card_id):
