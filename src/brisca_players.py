@@ -21,11 +21,22 @@ class BriscaPlayerBase:
         self.unseen_cards.remove_card(card)
 
     def play(self, table, victory_suit=None):
-        print('Not implemented in player {}'.format(self.name))
+        for c in table.cards:
+            self.unseen_cards.remove_card(c)
+        idx = self.select_card(table, victory_suit)
+        table.add(self.hand.cards[idx], self.name)
+        played_card = self.hand.cards[idx]
+        del self.hand.cards[idx]
+        assert isinstance(played_card, Card)
+        return idx, played_card
+
+    def select_card(self,table, victory_suit):
+        print('Not implemented in Base!')
+        return -1
 
 
 class BriscaPlayerHuman(BriscaPlayerBase):
-    def play(self, table, victory_suit=None):
+    def select_card(self, table, victory_suit):
         print('Cartes jugades:')
         for c in table.cards:
             print(c)
@@ -35,26 +46,17 @@ class BriscaPlayerHuman(BriscaPlayerBase):
         idx = -1
         while idx < 0 or idx >= len(self.hand.cards):
             idx = int(input("Carta a jugar: "))
-        table.add(self.hand.cards[idx], self.name)
-        played_card = self.hand.cards[idx]
-        del self.hand.cards[idx]
-        assert isinstance(played_card, Card)
-        return idx, played_card
+        return idx
 
 
 class BriscaPlayerRandom(BriscaPlayerBase):
-    def play(self, table, victory_suit=None):
+    def select_card(self, table, victory_suit):
         idx = int(random.random() * len(self.hand.cards))
-        # print('Jugador {}: baixa {}'.format(self.name, self.hand.cards[idx]))
-        table.add(self.hand.cards[idx], self.name)
-        played_card = self.hand.cards[idx]
-        del self.hand.cards[idx]
-        assert isinstance(played_card, Card)
-        return idx, played_card
+        return idx
 
 
 class BriscaPlayerSimpleAI(BriscaPlayerBase):
-    def play(self, table, victory_suit=None):
+    def select_card(self, table, victory_suit):
 
         # Rule of play:
         # * If first player or can not win plays the card with less points.
@@ -78,9 +80,4 @@ class BriscaPlayerSimpleAI(BriscaPlayerBase):
             if len(candidates.cards) > 0 and (points_table > 0 or candidates.max_points()[1] > 0):
                 idx = self.hand.cards.index(candidates.cards[candidates.max_points()[0]])
 
-        # print('Jugador {}: baixa {}'.format(self.name, self.hand.cards[idx]))
-        table.add(self.hand.cards[idx], self.name)
-        played_card = self.hand.cards[idx]
-        del self.hand.cards[idx]
-        assert isinstance(played_card, Card)
-        return idx, played_card
+        return idx
