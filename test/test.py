@@ -7,10 +7,10 @@ from brisca_players import BriscaPlayerBase
 class BriscaUtilsTestCase(unittest.TestCase):
     def setUp(self):
         self.hand = Stack()
-        self.hand.cards.append(BriscaCard(0, 1))
-        self.hand.cards.append(BriscaCard(1, 3))
-        self.hand.cards.append(BriscaCard(2, 10))
-        self.victory_card = BriscaCard(0, 9)
+        self.hand.cards.append(BriscaCard('Oros', 1))
+        self.hand.cards.append(BriscaCard('Copes', 3))
+        self.hand.cards.append(BriscaCard('Espases', 10))
+        self.victory_card = BriscaCard('Oros', 9)
 
     def test_set_card_points(self):
         deck = BriscaDeck()
@@ -37,10 +37,10 @@ class BriscaUtilsTestCase(unittest.TestCase):
         owner, card, points = check_victory_hand(table, self.victory_card.suit)
         self.assertEqual(owner, 'player3', 'Oros must wins over Copes')
         table.clear()
-        table.add(BriscaCard(1, 4), 'player1')
-        table.add(BriscaCard(1, 5), 'player2')
-        table.add(BriscaCard(1, 6), 'player3')
-        table.add(BriscaCard(1, 7), 'player4')
+        table.add(BriscaCard('Copes', 4), 'player1')
+        table.add(BriscaCard('Copes', 5), 'player2')
+        table.add(BriscaCard('Copes', 6), 'player3')
+        table.add(BriscaCard('Copes', 7), 'player4')
         owner, card, points = check_victory_hand(table, self.victory_card.suit)
         self.assertEqual(owner, 'player4', '7 must win 4, 5 and 6')
 

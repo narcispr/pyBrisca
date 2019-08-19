@@ -3,9 +3,16 @@ import random
 
 class Card:
     suit_name = {0: 'Oros', 1: 'Copes', 2: 'Espases', 3: 'Bastos'}
+    suit_index = {'Oros': 0, 'Copes': 1, 'Espases': 2, 'Bastos': 3}
 
     def __init__(self, suit, number, points=0):
-        self.suit = suit
+        if isinstance(suit, int):
+            self.suit = suit
+        elif isinstance(suit, str) and suit in Card.suit_index:
+            self.suit = Card.suit_index[suit]
+        else:
+            print("Invalid suit {}. Suit set to 'Oros'".format(suit))
+            self.suit = 0
         self.number = number
         self.points = points
         self.value = 0
