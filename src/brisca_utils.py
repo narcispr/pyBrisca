@@ -12,9 +12,15 @@ class BriscaDeck(Deck):
         assert suit < 4, 'Invalid card id'
         number = (card_id - suit * 12)
         assert number <= 12, 'Invalid card id'
-        c = Card(suit, number, 0, 0)
+        c = BriscaCard(suit, number)
         set_card_points(c)
         return c
+
+
+class BriscaCard(Card):
+    def __init__(self, suit, number):
+        Card.__init__(self, suit, number)
+        set_card_points(self)
 
 
 def check_victory_hand(table, victory_suit):

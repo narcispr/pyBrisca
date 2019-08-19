@@ -4,11 +4,11 @@ import random
 class Card:
     suit_name = {0: 'Oros', 1: 'Copes', 2: 'Espases', 3: 'Bastos'}
 
-    def __init__(self, suit, number, points=0, value=0):
+    def __init__(self, suit, number, points=0):
         self.suit = suit
         self.number = number
         self.points = points
-        self.value = value
+        self.value = 0
 
     def __str__(self):
         return '{} {}'.format(self.number, Card.suit_name[self.suit])
@@ -64,7 +64,7 @@ class Deck:
         self.cards = list()
         for s in range(4):
             for n in range(1, 13):
-                self.cards.append(Card(s, n, 0, 0))
+                self.cards.append(Card(s, n))
 
     def __str__(self):
         ret = ''
@@ -97,4 +97,4 @@ class Deck:
         assert suit < 4, 'Invalid card id'
         number = (card_id - suit * 12)
         assert number <= 12, 'Invalid card id'
-        return Card(suit, number, 0, 0)
+        return Card(suit, number)
