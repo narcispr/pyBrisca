@@ -1,6 +1,6 @@
 from card_utils import Stack
 from brisca_utils import check_victory_hand, BriscaDeck
-from brisca_players import BriscaPlayerSimpleAI, BriscaPlayerRandom
+from brisca_players import BriscaPlayerSimpleAI, BriscaPlayerHuman
 
 
 class BriscaGame:
@@ -16,7 +16,10 @@ class BriscaGame:
         print('Trumfo: {}'.format(self.central_card))
         for player in self.players:
             player.hand = Stack()
-            player.hand.cards = self.deck.deal(3)
+            hand = self.deck.deal(3)
+            for c in hand:
+                player.receive_card(c)
+            player.set_up(self.central_card.suit, len(players_list))
 
     def player_order(self):
         order = list()
@@ -28,13 +31,14 @@ class BriscaGame:
 
     def round(self):
         table = Stack()
-        for player_idx in self.player_order():
-            idx, played_card = self.players[player_idx].play(table, self.central_card.suit)
+        for v, player_idx in enumerate(self.player_order()):
+            idx, played_card = self.players[player_idx].play(table)
             print('Jugador {}: baixa {}'.format(self.players[player_idx].name, played_card))
 
         owner, card, points = check_victory_hand(table, self.central_card.suit)
 
         for j, player in enumerate(self.players):
+            player.clear_table(table)
             if player.name == owner:
                 player.points += points
                 self.next_player = j
@@ -68,11 +72,11 @@ class BriscaGame:
 
 if __name__ == '__main__':
     params = dict()
-    params['victory_suit_penalty'] = 0
+    params['victory_suit_penalty'] = 3.5
     # victory_suit_penalty --> amb 2 jugadors millor posar 3.5 amb 4 jugadors no ho tinc clar...
     p1 = BriscaPlayerSimpleAI('Simple-AI_1', params)
-    p2 = BriscaPlayerRandom('Random')
+    p2 = BriscaPlayerSimpleAI('Simple-AI_2', params)
 
-    players = [p1, p2]
+    players = [p2, p1]
     brisca = BriscaGame(players)
     result = brisca.game()

@@ -16,6 +16,7 @@ class Card:
         self.number = number
         self.points = points
         self.value = 0
+        self.wining_probability = 0
 
     def __str__(self):
         return '{} {}'.format(self.number, Card.suit_name[self.suit])
@@ -55,6 +56,16 @@ class Stack:
         self.cards.clear()
         self.owner.clear()
 
+    def card_index(self, card):
+        return self.cards.index(card)
+
+    def get(self, i):
+        assert i < len(self.cards), 'Stack overflow!'
+        return self.cards[i]
+
+    def __len__(self):
+        return len(self.cards)
+
     def __str__(self):
         ret = ''
         if len(self.owner) < len(self.cards):
@@ -93,15 +104,11 @@ class Deck:
         return ret
 
     def remove_card(self, card):
-        idx = self.cards.index(card)
+        try:
+            idx = self.cards.index(card)
+        except:
+            idx = -1
+
         if idx >= 0:
             del self.cards[idx]
         return idx
-
-    @staticmethod
-    def get_card_id(card_id):
-        suit = int((card_id - 1) / 12)
-        assert suit < 4, 'Invalid card id'
-        number = (card_id - suit * 12)
-        assert number <= 12, 'Invalid card id'
-        return Card(suit, number)

@@ -39,24 +39,24 @@ def check_victory_hand(table, victory_suit):
     return owner, card, points
 
 
-def calculate_card_value(card, victory_suit, hand_suit=None):
-    if hand_suit is None:
-        hand_suit = card.suit
+def calculate_card_value(card, victory_suit, hand_suit):
+    card.value = card.points
     if card.suit == victory_suit:
         card.value = card.points + 24
     elif card.suit == hand_suit:
         card.value = card.points + 12
+
     if card.number == 4:
         card.value += 0.1
-    if card.number == 5:
+    elif card.number == 5:
         card.value += 0.2
-    if card.number == 6:
+    elif card.number == 6:
         card.value += 0.3
-    if card.number == 7:
+    elif card.number == 7:
         card.value += 0.4
-    if card.number == 8:
+    elif card.number == 8:
         card.value += 0.5
-    if card.number == 9:
+    elif card.number == 9:
         card.value += 0.6
 
 

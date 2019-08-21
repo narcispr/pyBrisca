@@ -3,7 +3,7 @@ import random
 import cv2
 from cv2 import aruco
 import pyttsx3
-from card_utils import Deck, Stack
+from card_utils import Stack
 from brisca_utils import check_victory_hand, BriscaDeck
 from brisca_players import BriscaPlayerSimpleAI
 
@@ -95,6 +95,7 @@ class BriscaGameAR:
             if answ == 's' or answ == 'S' or answ == 'si' or answ == 'SI' or answ == 'Si':
                 confirmed = True
         self.list_of_seen_cards.pop()
+        self.player.set_up(self.victory_card.suit, len(self.players_name))
 
         self.announce(['Reparteix-me 3 cartes, siusplau!', "Dona'm la ma inicial"])
         for j in range(3):
@@ -165,7 +166,7 @@ if __name__ == '__main__':
         for i in range(num_players):
             nom = input('Nom jugador/a {}: '.format(i + 1))
             players_name.append(nom)
-        nom_ai = input('Tria el meu nom: '.format(i + 1))
+        nom_ai = input('Tria el meu nom: ')
 
         params = dict()
         params['victory_suit_penalty'] = 3.5
