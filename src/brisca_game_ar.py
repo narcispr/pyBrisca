@@ -108,7 +108,7 @@ class BriscaGameAR:
             table = Stack()
             for p in order:
                 if p == self.player_idx:
-                    idx, played_card = self.player.play(table, self.victory_card.suit)
+                    idx, played_card = self.player.play(table)
                     self.announce(['Agafeu la carta en posicio {}, que és un {}.'.format(idx + 1, played_card),
                                    'Jugo la carta {} que està en posició {}'.format(played_card, idx + 1),
                                    'Agafa la carta número {} que és un {}'.format(idx + 1, played_card)])
