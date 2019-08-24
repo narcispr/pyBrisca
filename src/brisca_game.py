@@ -1,11 +1,11 @@
 from card_utils import Stack
 from brisca_utils import check_victory_hand, BriscaDeck
-from brisca_players import BriscaPlayerSimpleAI, BriscaPlayerHuman
+from brisca_players import BriscaPlayerSimpleAI, BriscaPlayerHuman, BriscaPlayerRandom
 
 
 class BriscaGame:
     def __init__(self, players_list):
-        assert len(players_list) > 0, "At least 1 player!"
+        assert len(players_list) > 1, "At least 2 player!"
         assert len(players_list) <= 4, "Maximum 4 players!"
         self.num_players = len(players_list)
         self.players = players_list
@@ -15,11 +15,11 @@ class BriscaGame:
         self.central_card = self.deck.cards[-1]
         print('Trumfo: {}'.format(self.central_card))
         for player in self.players:
+            player.set_up(self.central_card.suit, len(players_list))
             player.hand = Stack()
             hand = self.deck.deal(3)
             for c in hand:
                 player.receive_card(c)
-            player.set_up(self.central_card.suit, len(players_list))
 
     def player_order(self):
         order = list()
@@ -48,8 +48,11 @@ class BriscaGame:
                 self.players[j].receive_card(new_card)
 
     def game(self):
-        while len(self.players[0].hand.cards) > 0:
+        # Play rounds
+        while len(self.players[0].hand) > 0:
             self.round()
+
+        # Check winner
         max_points = -1
         winner_idx = -1
         winner = None
@@ -58,7 +61,6 @@ class BriscaGame:
                 max_points = player.points
                 winner = player.name
                 winner_idx = j
-
         print('El guanyador es el jugador {}: {} amb {} punts.'.format(winner_idx, winner, max_points))
         return winner_idx, max_points
 
@@ -77,6 +79,6 @@ if __name__ == '__main__':
     p1 = BriscaPlayerSimpleAI('Simple-AI_1', params)
     p2 = BriscaPlayerSimpleAI('Simple-AI_2', params)
 
-    players = [p2, p1]
+    players = [p1, p2]
     brisca = BriscaGame(players)
     result = brisca.game()

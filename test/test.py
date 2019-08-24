@@ -2,7 +2,7 @@ import unittest
 import random
 from card_utils import Stack
 from brisca_utils import calculate_card_value, check_victory_hand, BriscaDeck, BriscaCard
-from brisca_players import BriscaPlayerBase, BriscaPlayerAIWithMemory
+from brisca_players import BriscaPlayerBase, BriscaPlayerSimpleAI
 
 
 class CardUtilsTestCase(unittest.TestCase):
@@ -76,8 +76,8 @@ class BriscaPlayerTestCase(unittest.TestCase):
 
         params = dict()
         params['victory_suit_penalty'] = 3.5
-        self.player_mem = BriscaPlayerAIWithMemory('player-AI-Mem', params)
-        self.player_mem.victory_suit = BriscaCard('Oros', 2).suit
+        self.player_simple_ai = BriscaPlayerSimpleAI('player-AI-Mem', params)
+        self.player_simple_ai.victory_suit = BriscaCard('Oros', 2).suit
 
     def test_unseen_cards(self):
         self.assertEqual(len(self.player.unseen_cards.cards), 48, 'Initially must be 48 unseen cards!')
@@ -90,23 +90,23 @@ class BriscaPlayerTestCase(unittest.TestCase):
     def test_brisca_player_candidates(self):
         table = Stack()
         table.add(BriscaCard('Copes', 10), 'player1')
-        self.player_mem.hand.add(BriscaCard('Oros', 3), self.player_mem.name)
-        self.player_mem.hand.add(BriscaCard('Copes', 8), self.player_mem.name)
-        self.player_mem.hand.add(BriscaCard('Copes', 12), self.player_mem.name)
-        self.player_mem.table = table
-        candidates = self.player_mem.get_candidate_cards()
+        self.player_simple_ai.hand.add(BriscaCard('Oros', 3), self.player_simple_ai.name)
+        self.player_simple_ai.hand.add(BriscaCard('Copes', 8), self.player_simple_ai.name)
+        self.player_simple_ai.hand.add(BriscaCard('Copes', 12), self.player_simple_ai.name)
+        self.player_simple_ai.table = table
+        candidates = self.player_simple_ai.get_candidate_cards()
         self.assertEqual(len(candidates), 2, '2 cards should win current table!')
 
         table.add(BriscaCard('Oros', 10), 'player2')
-        self.player_mem.table = table
-        candidates = self.player_mem.get_candidate_cards()
+        self.player_simple_ai.table = table
+        candidates = self.player_simple_ai.get_candidate_cards()
         self.assertEqual(candidates.cards[0], BriscaCard('Oros', 3), 'Only 3 Oros wins!')
 
     def test_brisca_player_wining_cards(self):
-        self.player_mem.table.clear()
-        self.player_mem.unseen_cards = BriscaDeck()
+        self.player_simple_ai.table.clear()
+        self.player_simple_ai.unseen_cards = BriscaDeck()
         played_card = BriscaCard('Copes', 10)
-        wining_cards = self.player_mem.get_unseen_cards_that_win(played_card)
+        wining_cards = self.player_simple_ai.get_unseen_cards_that_win(played_card)
         self.assertEqual(len(wining_cards), 16, 'All Oros (12) plus 1, 3, 12 and 11 of copes (4) win!')
 
     def test_brisca_player_probability(self):

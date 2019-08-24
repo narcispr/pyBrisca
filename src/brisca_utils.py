@@ -7,6 +7,7 @@ class BriscaDeck(Deck):
         for c in self.cards:
             set_card_points(c)
 
+    @staticmethod
     def get_card_id(card_id):
         suit = int((card_id - 1) / 12)
         assert suit < 4, 'Invalid card id'
