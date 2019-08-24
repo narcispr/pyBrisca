@@ -5,7 +5,7 @@ that allows *human* players and *AI* players to play together using *normal* car
 
 ## Brisca Game Class
 Allows you to play brisca using 2 to 4 of these players:
-* *Human*: Allows a human player to choose which card to play through a terminal interface.
+* *Human*: Allows a human player to choose which card to play through a terminal interface. It calculates wining probability for each card in hand according to already seen cards.
 * *Random*: Picks up a random card from the player hand. 
 * *Simple-AI*: Rule based AI that plays much better than random (and some human players too).
 
@@ -35,5 +35,5 @@ See an example of an *official* pyBrisca-AR deck below:
 ## TODO:
 * Complete tests!
 * Create a more clever AI player.
-* Mult language (now it is half english half català).
+* Multi language (now it is half english half català).
 * Move to Android?
