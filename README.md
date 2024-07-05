@@ -28,10 +28,10 @@ See an example of an *official* pyBrisca-AR deck below:
 ![](./data/brisca_ar_deck.jpg)
 
 ## Installation dependencies
-* python3 -m pip install opencv-contrib-python
-* sudo apt-get install python3-espeak
-* pip3 install pyttsx3
-
+* pip install opencv-contrib-python
+* pip install pyttsx3
+* pip install python3-espeak
+  
 ## TODO:
 * Complete tests!
 * Create a more clever AI player.
