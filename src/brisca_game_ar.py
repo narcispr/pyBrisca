@@ -11,8 +11,9 @@ from brisca_players import BriscaPlayerSimpleAI
 def get_marker_id():
     cam = cv2.VideoCapture(0)
     num_frames = 0
-    aruco_dict = aruco.Dictionary_get(aruco.DICT_6X6_100)
-    parameters = aruco.DetectorParameters_create()
+    aruco_dict = cv2.aruco.getPredefinedDictionary(aruco.DICT_6X6_100)
+    parameters = aruco.DetectorParameters()
+    detector = cv2.aruco.ArucoDetector(aruco_dict, parameters)
     card_id = -1
 
     while num_frames < 125:
@@ -27,7 +28,7 @@ def get_marker_id():
             break
 
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
+        corners, ids, rejectedImgPoints = detector.detectMarkers(gray)
         num_frames += 1
         if ids is not None:
             card_id = ids[0][0]
@@ -53,7 +54,7 @@ class BriscaGameAR:
         self.list_of_seen_cards = list()
 
         self.engine = pyttsx3.init()
-        self.engine.setProperty('voice', 'catalan')
+        self.engine.setProperty('voice', 'calatalan')
 
     def announce(self, text):
         if isinstance(text, list):
